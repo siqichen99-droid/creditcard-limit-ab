@@ -26,14 +26,14 @@ guardrail definitions are pre-registered prior to data collection.
 | Test type | Two-sided two-proportion z-test |
 
 **Control:** *"You may be eligible for a higher credit limit. Learn more."*  
-**Treatment:** *"You're pre-approved for a $8,500 limit increase : accept in one tap."*
+**Treatment:** *"You're pre-approved for a $8,500 limit increase. Accept in one tap."*
 
 ---
 
 ## Data Source
 
 Experiment parameters are calibrated from the **UCI Credit Card Default dataset**
-(Taiwan, 2005 : 30,000 clients, 25 variables).
+(Taiwan, 2005; 30,000 clients, 25 variables).
 
 - Baseline acceptance rates are derived from per-segment utilization and payment behavior distributions
 - Default rates per segment are taken directly from the real dataset and used to set guardrail thresholds
@@ -49,10 +49,10 @@ Place as `data/UCI_Credit_Card.csv`.
 ```
 creditcard-limit-ab/
 ├── data/
-│   ├── UCI_Credit_Card.csv           # Real UCI data : not committed (see .gitignore)
+│   ├── UCI_Credit_Card.csv           # Real UCI data (not committed, see .gitignore)
 │   ├── calibration_params.json       # Extracted distributional parameters (Phase 1 output)
 │   ├── experiment_config.json        # Power analysis config (Phase 2 output)
-│   ├── ab_experiment_data.csv        # Simulated experiment : 22,970 users (Phase 3 output)
+│   ├── ab_experiment_data.csv        # Simulated experiment data, 22,970 users (Phase 3 output)
 │   └── ab_daily_summary.csv          # Daily rollup by variant (Phase 3 output)
 ├── notebooks/
 │   ├── 01_calibrate.py               # Phase 1: extract real distributions from UCI data
@@ -61,7 +61,7 @@ creditcard-limit-ab/
 │   ├── 04_analysis.py                # Phase 4: statistical tests, guardrails, charts, impact
 │   └── run_sql.py                    # Phase 5: execute all SQL sections locally via SQLite
 ├── sql/
-│   └── ab_queries.sql                # Production SQL : Snowflake / Redshift / BigQuery
+│   └── ab_queries.sql                # Production SQL (Snowflake / Redshift / BigQuery)
 ├── outputs/
 │   ├── figures/                      # All generated charts
 │   └── phase4_results_summary.txt    # Plain-text results summary
@@ -93,7 +93,7 @@ python3 notebooks/run_sql.py --section 3  # specific section
 
 ---
 
-## Phase 1 : Data Calibration
+## Phase 1: Data Calibration
 
 Reads the real UCI dataset and extracts distributional parameters used to calibrate the simulation. Users are segmented across two behavioral dimensions:
 
@@ -102,11 +102,11 @@ Reads the real UCI dataset and extracts distributional parameters used to calibr
 
 Default rates, credit limit distributions, and monthly bill amounts are extracted per segment. These ground all downstream simulation parameters in observed real-world behavior rather than assumptions.
 
-![Phase 1 : Calibration](outputs/figures/phase1_calibration.png)
+![Phase 1: Calibration](outputs/figures/phase1_calibration.png)
 
 ---
 
-## Phase 2 : Experiment Design and Power Analysis
+## Phase 2: Experiment Design and Power Analysis
 
 Computes the required sample size to reliably detect the pre-specified minimum detectable effect (MDE = +1.51pp absolute lift) at α = 0.05 and 80% power. Three power curve panels are produced:
 
@@ -125,50 +125,50 @@ Computes the required sample size to reliably detect the pre-specified minimum d
 | Required n total | 10,558 |
 | Actual n per variant | 11,485 (over-powered for temporal stability) |
 
-![Phase 2 : Power Analysis](outputs/figures/phase2_power_analysis.png)
+![Phase 2: Power Analysis](outputs/figures/phase2_power_analysis.png)
 
 ---
 
-## Phase 3 : Simulation and SRM Validation
+## Phase 3: Simulation and SRM Validation
 
 Generates the stratified experiment dataset (22,970 users across 9 strata). Each stratum is assigned using a fixed 50/50 split. Sample ratio mismatch (SRM) is validated globally and per stratum using a chi-squared goodness-of-fit test before any metric analysis is performed.
 
-**SRM result:** chi-squared = 0.0000, p = 1.0000 : no mismatch detected.
+**SRM result:** chi-squared = 0.0000, p = 1.0000. No mismatch detected.
 
 Note: default flags are drawn using a stratum-level fixed random seed shared across variants. Default risk is an inherent user property and should not differ between control and treatment by construction. This prevents random noise from producing spurious guardrail breaches.
 
-![Phase 3 : Simulation Validation](outputs/figures/phase3_simulation_validation.png)
+![Phase 3: Simulation Validation](outputs/figures/phase3_simulation_validation.png)
 
 ---
 
-## Phase 4 : Statistical Analysis
+## Phase 4: Statistical Analysis
 
 ### 4a. Primary and Secondary Metrics
 
-**Primary metric : offer acceptance rate** (two-proportion z-test, two-sided):
+**Primary metric: offer acceptance rate** (two-proportion z-test, two-sided):
 
 | | Control | Treatment |
 |--|---------|-----------|
 | Users | 11,485 | 11,485 |
 | Accepted | 866 | 1,045 |
 | Acceptance rate | 7.54% | 9.10% |
-| Absolute lift | : | +1.56pp |
-| Relative lift | : | +20.7% |
-| 95% CI | : | [+0.84pp, +2.27pp] |
-| Z-statistic | : | 4.28 |
-| p-value | : | 0.000019 |
-| Result | : | Significant |
+| Absolute lift | N/A | +1.56pp |
+| Relative lift | N/A | +20.7% |
+| 95% CI | N/A | [+0.84pp, +2.27pp] |
+| Z-statistic | N/A | 4.28 |
+| p-value | N/A | 0.000019 |
+| Result | N/A | Significant |
 
-**Secondary metric : revenue per user** (Mann-Whitney U, bootstrap CI):
+**Secondary metric: revenue per user** (Mann-Whitney U, bootstrap CI):
 
 | | Control | Treatment |
 |--|---------|-----------|
 | Mean revenue per user | $6.39 | $7.36 |
-| Absolute lift | : | +$0.97 |
-| 95% bootstrap CI | : | [+$0.04, +$1.96] |
-| p-value | : | 0.000031 |
+| Absolute lift | N/A | +$0.97 |
+| 95% bootstrap CI | N/A | [+$0.04, +$1.96] |
+| p-value | N/A | 0.000031 |
 
-![Phase 4a : Primary Metrics](outputs/figures/phase4a_primary_metrics.png)
+![Phase 4a: Primary Metrics](outputs/figures/phase4a_primary_metrics.png)
 
 ---
 
@@ -179,7 +179,7 @@ Subgroups were declared before data collection to prevent post-hoc p-hacking.
 
 **Key finding:** Lift is concentrated in medium-utilization on-time payers (+8.8% relative). This segment is actively managing credit and most responsive to a specific pre-approved dollar amount. Low-utilization users show moderate response. High-utilization late-payment users show limited response, consistent with lower perceived approval likelihood.
 
-![Phase 4b : Subgroup Analysis](outputs/figures/phase4b_subgroup_analysis.png)
+![Phase 4b: Subgroup Analysis](outputs/figures/phase4b_subgroup_analysis.png)
 
 ---
 
@@ -195,7 +195,7 @@ All three guardrails are pre-registered. Failure on any single guardrail is a ha
 
 All guardrails passed. Default rate is identical by construction (stratum-fixed seed). Fraud flag rate is within threshold. Monthly spend increased in the treatment group, which is expected and directionally positive.
 
-![Phase 4c : Guardrails](outputs/figures/phase4c_guardrails.png)
+![Phase 4c: Guardrails](outputs/figures/phase4c_guardrails.png)
 
 ---
 
@@ -208,11 +208,11 @@ Compares lift in the early exposure window (days 1–3) against steady-state (da
 | Early (days 1–3) | +1.51pp |
 | Steady state (days 4–14) | +1.57pp |
 | Novelty ratio | 0.965 |
-| Flag | None : ratio below 1.20 threshold |
+| Flag | None (ratio = 0.965, below 1.20 threshold) |
 
 Effect is stable across the experiment window. Steady-state lift is reported.
 
-![Phase 4d : Novelty Effect](outputs/figures/phase4d_novelty_trend.png)
+![Phase 4d: Novelty Effect](outputs/figures/phase4d_novelty_trend.png)
 
 ---
 
@@ -229,11 +229,11 @@ Revenue model: incremental monthly spend from limit increase × 12 months × int
 | 95% CI (daily) | [$5,100 – $13,700] |
 | Annual revenue impact | ~$3.4M |
 
-![Phase 4e : Business Impact](outputs/figures/phase4e_business_impact.png)
+![Phase 4e: Business Impact](outputs/figures/phase4e_business_impact.png)
 
 ---
 
-## Phase 5 : Production SQL
+## Phase 5: Production SQL
 
 All queries are written for **Snowflake / Redshift / BigQuery** and validated locally via SQLite using `run_sql.py`.
 
@@ -297,7 +297,7 @@ SUM(chi2_component) OVER ()                       AS chi2_total
 
 | Concept | Implementation |
 |---------|---------------|
-| Real-data calibration for simulation | `01_calibrate.py` : UCI segment distributions |
+| Real-data calibration for simulation | `01_calibrate.py` (UCI segment distributions) |
 | Cohen's h, NormalIndPower, power curves | `02_experiment_design.py` |
 | Stratified simulation across 9 cells | `03_simulate.py` |
 | SRM chi-squared test (global and per-stratum) | `03_simulate.py`, SQL Section 1 |
@@ -314,13 +314,12 @@ SUM(chi2_component) OVER ()                       AS chi2_total
 
 ## Stack
 
-Python 3.10+ : pandas, numpy, scipy, statsmodels, matplotlib, seaborn  
-SQL : Snowflake / Redshift / BigQuery compatible, SQLite for local validation
+**Python 3.10+:** pandas, numpy, scipy, statsmodels, matplotlib, seaborn  
+**SQL:** Snowflake / Redshift / BigQuery compatible, SQLite for local validation
 
 ---
 
 ## Author
 
-Siqi Chen : Data Analyst / Product Analyst / Data Scientist  
-LinkedIn: https://linkedin.com/in/yourprofile  
-GitHub: https://github.com/yourhandle
+Siqi Chen | Data Analyst / Product Analyst / Data Scientist  
+LinkedIn: www.linkedin.com/in/siqi-chen-3159431b6
