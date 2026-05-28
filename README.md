@@ -52,7 +52,7 @@ creditcard-limit-ab/
 │   ├── UCI_Credit_Card.csv           # Real UCI data (not committed, see .gitignore)
 │   ├── calibration_params.json       # Extracted distributional parameters (Phase 1 output)
 │   ├── experiment_config.json        # Power analysis config (Phase 2 output)
-│   ├── ab_experiment_data.csv        # Simulated experiment data, 22,970 users (Phase 3 output)
+│   ├── ab_experiment_data.csv        # Simulated experiment data, 13,224 users (Phase 3 output)
 │   └── ab_daily_summary.csv          # Daily rollup by variant (Phase 3 output)
 ├── notebooks/
 │   ├── 01_calibrate.py               # Phase 1: extract real distributions from UCI data
@@ -116,14 +116,14 @@ Computes the required sample size to reliably detect the pre-specified minimum d
 
 | Parameter | Value |
 |-----------|-------|
-| Baseline acceptance rate | 7.63% |
-| Target acceptance rate | 9.14% |
-| Absolute MDE | +1.51pp |
-| Relative MDE | +19.8% |
-| Cohen's h | 0.055 |
-| Required n per variant | 5,279 |
-| Required n total | 10,558 |
-| Actual n per variant | 11,485 (over-powered for temporal stability) |
+| Baseline acceptance rate | 11.06% |
+| Target acceptance rate | 12.64% |
+| Absolute MDE | +1.58pp |
+| Relative MDE | +14.3% |
+| Cohen's h | 0.049 |
+| Required n per variant | 6,562 |
+| Required n total | 13,124 |
+| Actual n per variant | 6,562 |
 
 ![Phase 2: Power Analysis](outputs/figures/phase2_power_analysis.png)
 
@@ -131,9 +131,9 @@ Computes the required sample size to reliably detect the pre-specified minimum d
 
 ## Phase 3: Simulation and SRM Validation
 
-Generates the stratified experiment dataset (22,970 users across 9 strata). Each stratum is assigned using a fixed 50/50 split. Sample ratio mismatch (SRM) is validated globally and per stratum using a chi-squared goodness-of-fit test before any metric analysis is performed.
+Generates the stratified experiment dataset (13,224 users across 9 strata). Each stratum is assigned with independent per-variant counts drawn with bounded ±3% noise to produce realistic T/C ratios. Sample ratio mismatch (SRM) is validated globally and per stratum using a chi-squared goodness-of-fit test before any metric analysis is performed.
 
-**SRM result:** chi-squared = 0.0000, p = 1.0000. No mismatch detected.
+**SRM result:** chi-squared = 0.0436, p = 0.8347. No mismatch detected.
 
 Note: default flags are drawn using a stratum-level fixed random seed shared across variants. Default risk is an inherent user property and should not differ between control and treatment by construction. This prevents random noise from producing spurious guardrail breaches.
 
@@ -149,24 +149,24 @@ Note: default flags are drawn using a stratum-level fixed random seed shared acr
 
 | | Control | Treatment |
 |--|---------|-----------|
-| Users | 11,485 | 11,485 |
-| Accepted | 866 | 1,045 |
-| Acceptance rate | 7.54% | 9.10% |
-| Absolute lift | N/A | +1.56pp |
-| Relative lift | N/A | +20.7% |
-| 95% CI | N/A | [+0.84pp, +2.27pp] |
-| Z-statistic | N/A | 4.28 |
-| p-value | N/A | 0.000019 |
+| Users | 6,600 | 6,624 |
+| Accepted | 732 | 830 |
+| Acceptance rate | 11.09% | 12.53% |
+| Absolute lift | N/A | +1.44pp |
+| Relative lift | N/A | +13.0% |
+| 95% CI | N/A | [+0.34pp, +2.54pp] |
+| Z-statistic | N/A | 2.56 |
+| p-value | N/A | 0.010345 |
 | Result | N/A | Significant |
 
 **Secondary metric: revenue per user** (Mann-Whitney U, bootstrap CI):
 
 | | Control | Treatment |
 |--|---------|-----------|
-| Mean revenue per user | $6.39 | $7.36 |
-| Absolute lift | N/A | +$0.97 |
-| 95% bootstrap CI | N/A | [+$0.04, +$1.96] |
-| p-value | N/A | 0.000031 |
+| Mean revenue per user | $9.15 | $10.58 |
+| Absolute lift | N/A | +$1.43 |
+| 95% bootstrap CI | N/A | [+$0.41, +$2.46] |
+| p-value | N/A | 0.009698 |
 
 ![Phase 4a: Primary Metrics](outputs/figures/phase4a_primary_metrics.png)
 
@@ -189,9 +189,9 @@ All three guardrails are pre-registered. Failure on any single guardrail is a ha
 
 | Guardrail | Control | Treatment | Delta | Threshold | Result |
 |-----------|---------|-----------|-------|-----------|--------|
-| Default rate | 20.00% | 20.00% | +0.00pp | <= +0.50pp | Pass |
-| Fraud flag rate | 0.26% | 0.33% | +0.07pp | <= +0.10pp | Pass |
-| Avg monthly spend | $92,540 | $94,313 | +1.92% | >= -5.00% | Pass |
+| Default rate | 22.09% | 22.10% | +0.01pp | <= +0.50pp | Pass |
+| Fraud flag rate | 0.29% | 0.38% | +0.09pp | <= +0.10pp | Pass |
+| Avg monthly spend | $51,104 | $52,883 | +3.48% | >= -5.00% | Pass |
 
 All guardrails passed. Default rate is identical by construction (stratum-fixed seed). Fraud flag rate is within threshold. Monthly spend increased in the treatment group, which is expected and directionally positive.
 
@@ -205,10 +205,10 @@ Compares lift in the early exposure window (days 1–3) against steady-state (da
 
 | Window | Avg lift |
 |--------|----------|
-| Early (days 1–3) | +1.51pp |
-| Steady state (days 4–14) | +1.57pp |
-| Novelty ratio | 0.965 |
-| Flag | None (ratio = 0.965, below 1.20 threshold) |
+| Early (days 1–3) | +1.01pp |
+| Steady state (days 4–14) | +1.56pp |
+| Novelty ratio | 0.650 |
+| Flag | None (ratio = 0.650, below 1.20 threshold) |
 
 Effect is stable across the experiment window. Steady-state lift is reported.
 
@@ -223,11 +223,11 @@ Revenue model: incremental monthly spend from limit increase × 12 months × int
 | Metric | Value |
 |--------|-------|
 | Daily eligible users | 8,000 |
-| Incremental acceptances per day | ~125 |
+| Incremental acceptances per day | ~115 |
 | Revenue per acceptance | $75.60 |
-| Daily revenue impact | ~$9,400 |
-| 95% CI (daily) | [$5,100 – $13,700] |
-| Annual revenue impact | ~$3.4M |
+| Daily revenue impact | ~$8,705 |
+| 95% CI (daily) | [$2,053 – $15,356] |
+| Annual revenue impact | ~$3.2M |
 
 ![Phase 4e: Business Impact](outputs/figures/phase4e_business_impact.png)
 
@@ -272,13 +272,13 @@ SUM(chi2_component) OVER ()                       AS chi2_total
 
 | Check | Result | Detail |
 |-------|--------|--------|
-| Primary metric significant (p < 0.05) | Pass | p = 0.000019 |
-| Default rate guardrail | Pass | Delta = +0.00pp, threshold <= +0.50pp |
-| Fraud flag rate guardrail | Pass | Delta = +0.07pp, threshold <= +0.10pp |
-| Monthly spend guardrail | Pass | Delta = +1.92%, threshold >= -5.00% |
-| Novelty inflation check | Pass | Ratio = 0.965, threshold < 1.20 |
+| Primary metric significant (p < 0.05) | Pass | p = 0.010345 |
+| Default rate guardrail | Pass | Delta = +0.01pp, threshold <= +0.50pp |
+| Fraud flag rate guardrail | Pass | Delta = +0.09pp, threshold <= +0.10pp |
+| Monthly spend guardrail | Pass | Delta = +3.48%, threshold >= -5.00% |
+| Novelty inflation check | Pass | Ratio = 0.650, threshold < 1.20 |
 
-**Recommendation: Ship.** Full rollout approved. Post-launch monitoring: track default rate and fraud flag rate daily for 14 days.
+**Recommendation: Ship.** Full rollout approved. Post-launch monitoring: track default rate and fraud flag rate daily for 14 days. Note: fraud flag delta (0.09pp) is close to the 0.10pp guardrail threshold — monitor closely in the first week.
 
 ---
 
