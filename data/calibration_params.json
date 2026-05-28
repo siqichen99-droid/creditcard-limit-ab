@@ -1,0 +1,150 @@
+{
+  "n_total": 30000,
+  "overall_default": 0.1998,
+  "limit_mean": 220448.33,
+  "limit_std": 176680.51,
+  "limit_median": 170000.0,
+  "util_shares": {
+    "Medium (30\u201370%)": 0.5426,
+    "Low (<30%)": 0.4071,
+    "High (>70%)": 0.0503
+  },
+  "pay_shares": {
+    "2+ mo delay": 0.5549,
+    "1-mo delay": 0.2825,
+    "On-time": 0.1625
+  },
+  "segment_defaults": [
+    {
+      "util_tier": "Low (<30%)",
+      "pay_segment": "On-time",
+      "default_rate": 0.1526,
+      "n": 1973,
+      "share": 0.0658
+    },
+    {
+      "util_tier": "Low (<30%)",
+      "pay_segment": "1-mo delay",
+      "default_rate": 0.1555,
+      "n": 3459,
+      "share": 0.1153
+    },
+    {
+      "util_tier": "Low (<30%)",
+      "pay_segment": "2+ mo delay",
+      "default_rate": 0.1864,
+      "n": 6781,
+      "share": 0.226
+    },
+    {
+      "util_tier": "Medium (30\u201370%)",
+      "pay_segment": "On-time",
+      "default_rate": 0.1956,
+      "n": 2648,
+      "share": 0.0883
+    },
+    {
+      "util_tier": "Medium (30\u201370%)",
+      "pay_segment": "1-mo delay",
+      "default_rate": 0.2007,
+      "n": 4575,
+      "share": 0.1525
+    },
+    {
+      "util_tier": "Medium (30\u201370%)",
+      "pay_segment": "2+ mo delay",
+      "default_rate": 0.2269,
+      "n": 9056,
+      "share": 0.3019
+    },
+    {
+      "util_tier": "High (>70%)",
+      "pay_segment": "On-time",
+      "default_rate": 0.2078,
+      "n": 255,
+      "share": 0.0085
+    },
+    {
+      "util_tier": "High (>70%)",
+      "pay_segment": "1-mo delay",
+      "default_rate": 0.224,
+      "n": 442,
+      "share": 0.0147
+    },
+    {
+      "util_tier": "High (>70%)",
+      "pay_segment": "2+ mo delay",
+      "default_rate": 0.3046,
+      "n": 811,
+      "share": 0.027
+    }
+  ],
+  "limit_by_util": {
+    "Medium (30\u201370%)": {
+      "mean": 220543.03,
+      "std": 176875.41,
+      "p25": 100000.0,
+      "p50": 170000.0,
+      "p75": 280000.0
+    },
+    "Low (<30%)": {
+      "mean": 220189.14,
+      "std": 175991.75,
+      "p25": 100000.0,
+      "p50": 170000.0,
+      "p75": 280000.0
+    },
+    "High (>70%)": {
+      "mean": 221525.2,
+      "std": 180221.22,
+      "p25": 100000.0,
+      "p50": 170000.0,
+      "p75": 280000.0
+    }
+  },
+  "bill_by_util": {
+    "Medium (30\u201370%)": {
+      "mean": 102062.11,
+      "std": 87486.53
+    },
+    "Low (<30%)": {
+      "mean": 40800.31,
+      "std": 38802.46
+    },
+    "High (>70%)": {
+      "mean": 171208.79,
+      "std": 140847.09
+    }
+  },
+  "acceptance_baseline_control": 0.0763,
+  "acceptance_baseline_treatment": 0.0869,
+  "lift_abs": 0.0105,
+  "lift_rel": 0.138,
+  "acceptance_by_segment": {
+    "Low (<30%)|On-time": 0.085,
+    "Low (<30%)|1-mo delay": 0.062,
+    "Low (<30%)|2+ mo delay": 0.035,
+    "Medium (30\u201370%)|On-time": 0.162,
+    "Medium (30\u201370%)|1-mo delay": 0.11,
+    "Medium (30\u201370%)|2+ mo delay": 0.058,
+    "High (>70%)|On-time": 0.235,
+    "High (>70%)|1-mo delay": 0.178,
+    "High (>70%)|2+ mo delay": 0.092
+  },
+  "acceptance_treat_by_segment": {
+    "Low (<30%)|On-time": 0.097,
+    "Low (<30%)|1-mo delay": 0.07,
+    "Low (<30%)|2+ mo delay": 0.038,
+    "Medium (30\u201370%)|On-time": 0.2,
+    "Medium (30\u201370%)|1-mo delay": 0.128,
+    "Medium (30\u201370%)|2+ mo delay": 0.063,
+    "High (>70%)|On-time": 0.26,
+    "High (>70%)|1-mo delay": 0.191,
+    "High (>70%)|2+ mo delay": 0.097
+  },
+  "interchange_rate": 0.015,
+  "avg_monthly_spend_delta": 420.0,
+  "revenue_per_acceptance": 75.6,
+  "daily_eligible_users": 8000,
+  "platform_mau": 2400000
+}

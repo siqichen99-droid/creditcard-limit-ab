@@ -1,0 +1,20 @@
+{
+  "alpha": 0.05,
+  "power": 0.8,
+  "baseline": 0.0763,
+  "target": 0.0869,
+  "mde_abs": 0.0106,
+  "mde_rel": 0.138925,
+  "effect_h": -0.03874,
+  "n_per_variant": 10460,
+  "n_total": 20920,
+  "runtime_days": 14,
+  "daily_eligible": 8000,
+  "platform_mau": 2400000,
+  "revenue_per_acceptance": 75.6,
+  "guardrails": {
+    "default_rate_max_lift_pp": 0.005,
+    "fraud_rate_max_lift_pp": 0.001,
+    "spend_min_pct_change": -0.05
+  }
+}
