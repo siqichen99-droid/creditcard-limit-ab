@@ -40,7 +40,7 @@ Experiment parameters are calibrated from the **UCI Credit Card Default dataset*
 - Credit limit and bill amount distributions inform the revenue model
 
 Download the dataset: https://www.kaggle.com/datasets/uciml/default-of-credit-card-clients-dataset  
-Place as `data/UCI_Credit_Card.csv`. Alternatively, run `notebooks/generate_synthetic_uci.py` for a proxy dataset that mirrors key distributional properties.
+Place as `data/UCI_Credit_Card.csv`.
 
 ---
 
@@ -55,7 +55,6 @@ creditcard-limit-ab/
 │   ├── ab_experiment_data.csv        # Simulated experiment — 22,970 users (Phase 3 output)
 │   └── ab_daily_summary.csv          # Daily rollup by variant (Phase 3 output)
 ├── notebooks/
-│   ├── generate_synthetic_uci.py     # Generates proxy UCI dataset (no Kaggle login required)
 │   ├── 01_calibrate.py               # Phase 1: extract real distributions from UCI data
 │   ├── 02_experiment_design.py       # Phase 2: power analysis and experiment config
 │   ├── 03_simulate.py                # Phase 3: stratified experiment simulation + SRM check
@@ -66,7 +65,6 @@ creditcard-limit-ab/
 ├── outputs/
 │   ├── figures/                      # All generated charts
 │   └── phase4_results_summary.txt    # Plain-text results summary
-├── WALKTHROUGH.md                    # Step-by-step explanation of every concept and file
 ├── requirements.txt
 └── README.md
 ```
@@ -79,12 +77,8 @@ creditcard-limit-ab/
 # Install dependencies
 pip install -r requirements.txt
 
-# Option A: with real Kaggle data
-#   Download UCI_Credit_Card.csv and place in data/
-#   https://www.kaggle.com/datasets/uciml/default-of-credit-card-clients-dataset
-
-# Option B: without Kaggle (synthetic proxy)
-python3 notebooks/generate_synthetic_uci.py
+# Download UCI_Credit_Card.csv from Kaggle and place in data/
+# https://www.kaggle.com/datasets/uciml/default-of-credit-card-clients-dataset
 
 # Run all phases in order
 python3 notebooks/01_calibrate.py
