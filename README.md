@@ -1,4 +1,4 @@
-# Credit Card Limit Increase — A/B Test
+# A/B Test: Personalized Credit Limit Display on a Card Offer Page
 
 **Author:** Siqi Chen &nbsp;|&nbsp; **Domain:** Fintech / Consumer Credit  
 **Stack:** Python · SQL (Snowflake / Redshift) · SQLite  
