@@ -116,7 +116,7 @@ QUERIES = {
         LIMIT 10
     """),
 
-    3: ("Primary Metric — Acceptance Rate", """
+    3: ("Primary Metric - Acceptance Rate", """
         WITH ul AS (
             SELECT a.user_id, a.variant,
                    MAX(CASE WHEN u.event_type='offer_accepted' THEN 1 ELSE 0 END) AS accepted,
@@ -135,7 +135,7 @@ QUERIES = {
         FROM ul GROUP BY variant ORDER BY variant
     """),
 
-    4: ("Segment Analysis — Util × Pay", """
+    4: ("Segment Analysis - Util × Pay", """
         WITH ul AS (
             SELECT a.user_id, a.variant, a.util_tier, a.pay_segment,
                    MAX(CASE WHEN u.event_type='offer_accepted' THEN 1 ELSE 0 END) AS accepted
